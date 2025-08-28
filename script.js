@@ -78,17 +78,20 @@ function impOperations(text) {
 
 function findNumbers(expression, opPos, operators) {
   let start = opPos - 1;
+  console.log(opPos);
   while (start > 0 && !operators.includes(expression[start - 1])) start--;
-  if (start === 0 && expression[start] === "-") start = 0;
-
   let end = opPos + 1;
-  while (end < expression.length && !operators.includes(expression[end])) end++;
-
-  return {
-    number1: Number(expression.slice(start, opPos)),
-    number2: Number(expression.slice(opPos + 1, end)),
-    range: [start, end],
-  };
+  while (
+    end < h1.value.textContent.length &&
+    !operators.includes(h1.value.textContent[end])
+  )
+    end++;
+  number1 = Number(h1.value.textContent.slice(start, opPos));
+  number2 = Number(h1.value.textContent.slice(opPos + 1, end));
+  h1.value.textContent = h1.value.textContent.replace(
+    h1.value.textContent.slice(start, end),
+    calculate(expression[opPos], number1, number2)
+  );
 }
 
 function operate() {
@@ -141,24 +144,7 @@ function operate() {
     }
     if (impIndex.length == 1) {
       let opPos = impIndex[0].pos;
-      let start = opPos - 1;
-      while (start > 0 && !operators.includes(h1.value.textContent[start - 1]))
-        start--;
-      console.log(start);
-      let end = opPos + 1;
-      while (
-        end < h1.value.textContent.length &&
-        !operators.includes(h1.value.textContent[end])
-      )
-        end++;
-      console.log(end);
-      console.log(start, end);
-      number1 = Number(h1.value.textContent.slice(start, opPos));
-      number2 = Number(h1.value.textContent.slice(opPos + 1, end));
-      h1.value.textContent = h1.value.textContent.replace(
-        h1.value.textContent.slice(start, end),
-        calculate(impIndex[0].op, number1, number2)
-      );
+      findNumbers(h1.value.textContent, opPos, operators);
     } else if (impIndex.length > 1) {
       while (impIndex.length > 1) {
         impIndex = [];
@@ -168,24 +154,7 @@ function operate() {
           }
         }
         let opPos = impIndex[0].pos;
-        let start = opPos - 1;
-        while (
-          start > 0 &&
-          !operators.includes(h1.value.textContent[start - 1])
-        )
-          start--;
-        let end = opPos + 1;
-        while (
-          end < h1.value.textContent.length &&
-          !operators.includes(h1.value.textContent[end])
-        )
-          end++;
-        number1 = Number(h1.value.textContent.slice(start, opPos));
-        number2 = Number(h1.value.textContent.slice(opPos + 1, end));
-        h1.value.textContent = h1.value.textContent.replace(
-          h1.value.textContent.slice(start, end),
-          calculate(impIndex[0].op, number1, number2)
-        );
+        findNumbers(h1.value.textContent, opPos, operators);
         text = h1.value.textContent;
       }
     }
